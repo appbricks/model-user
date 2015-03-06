@@ -1,0 +1,92 @@
+buildscript {
+    repositories {
+        maven { url "https://repo.spring.io/libs-release" }
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("net.saliman:gradle-cobertura-plugin:2.2.4")
+    }
+}
+
+apply plugin: "java"
+apply plugin: 'maven'
+apply plugin: "cobertura"
+apply plugin: "eclipse"
+apply plugin: "idea"
+
+group = 'com.leapvest'
+version =  "0.1.0-SNAPSHOT"
+
+jar {
+    baseName = "lv-model-common"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://repo.spring.io/libs-release" }
+}
+
+dependencies {
+
+    compile(
+        ["org.springframework:spring-core:4.1.4.RELEASE"],
+        ["org.springframework.security:spring-security-core:3.2.5.RELEASE"],
+        ["org.springframework.social:spring-social-security:1.1.0.RELEASE"],
+        ["org.springframework.data:spring-data-commons:1.9.2.RELEASE"],
+        ["org.springframework.data:spring-data-mongodb:1.6.2.RELEASE"]
+    )
+
+    testCompile(
+        ["org.springframework:spring-test:4.1.4.RELEASE"],
+        ["org.slf4j:slf4j-log4j12:1.7.10"],
+        ["org.testng:testng:6.8.21"],
+        ["org.uncommons:reportng:1.1.4"],
+        ["org.mockito:mockito-all:1.9.5"],
+        ["org.easytesting:fest-assert-core:2.0M10"],
+        // workaround for a known issue with TestNG 6.x: explicitly add Guice (Gradle will fail to run tests otherwise)
+        ["com.google.inject:guice:3.0"]
+    )
+}
+
+// ensure that test resources (src/test/resources) are added to CLASSPATH;
+// see http://forums.gradle.org/gradle/topics/tests_arent_executed_when_setting_the_test_runtimeclasspath and
+// http://gradle.org/docs/current/dsl/org.gradle.api.tasks.testing.Test.html#org.gradle.api.tasks.testing.Test:classpath
+sourceSets {
+    main {
+        runtimeClasspath = files(output.resourcesDir) + runtimeClasspath
+    }
+    test {
+        runtimeClasspath = files(output.resourcesDir) + runtimeClasspath
+    }
+}
+
+test {
+    useTestNG() {
+        suiteXmlBuilder().suite(name: "gradle-testng-mockito-bootstrap", parallel: "tests") {
+            test (name : "all-tests") {
+                packages {
+                    "package" (name: "com.leapvest.*")
+                }
+            }
+        }
+    }
+    options {
+        listeners << "org.uncommons.reportng.HTMLReporter"
+        listeners << "org.uncommons.reportng.JUnitXMLReporter"
+    }
+    ext.useDefaultListeners = true
+    ext.workingDirectory = "build/"
+}
+
+// https://github.com/stevesaliman/gradle-cobertura-plugin
+// http://ingorichter.blogspot.ch/2013/03/using-cobertura-with-gradle.html for list of options
+cobertura {
+    coverageFormats = ["xml", "html"]
+}
+
+// See http://www.gradle.org/docs/current/userguide/gradle_wrapper.html
+task wrapper(type: Wrapper) {
+    gradleVersion = "2.2.1"
+}
