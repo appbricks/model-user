@@ -15,15 +15,11 @@ apply plugin: "cobertura"
 apply plugin: "eclipse"
 apply plugin: "idea"
 
-group = 'com.leapvest'
+group = 'org.appbricks'
 version =  "0.1.0-SNAPSHOT"
 
 jar {
-<<<<<<< HEAD
-    baseName = "lv-user-model"
-=======
-    baseName = "lv-model-common"
->>>>>>> ef163b96039064c4a329bd10b8fb84f83d16d9e5
+    baseName = "ab-user-model"
 }
 
 repositories {
@@ -39,14 +35,10 @@ dependencies {
         ["org.springframework.security:spring-security-core:3.2.5.RELEASE"],
         ["org.springframework.social:spring-social-security:1.1.0.RELEASE"],
         ["org.springframework.data:spring-data-commons:1.9.2.RELEASE"],
-<<<<<<< HEAD
         ["org.springframework.data:spring-data-mongodb:1.6.2.RELEASE"],
         ["org.mongodb:mongo-java-driver:2.13.0"],
         ["com.github.mongobee:mongobee:0.9"],
-        ["com.leapvest:lv-model-common:0.1.0-SNAPSHOT"]
-=======
-        ["org.springframework.data:spring-data-mongodb:1.6.2.RELEASE"]
->>>>>>> ef163b96039064c4a329bd10b8fb84f83d16d9e5
+        ["org.appbricks:ab-model-common:0.1.0-SNAPSHOT"]
     )
 
     testCompile(
@@ -78,7 +70,7 @@ test {
         suiteXmlBuilder().suite(name: "gradle-testng-mockito-bootstrap", parallel: "tests") {
             test (name : "all-tests") {
                 packages {
-                    "package" (name: "com.leapvest.*")
+                    "package" (name: "org.appbricks.*")
                 }
             }
         }
@@ -91,7 +83,6 @@ test {
     ext.workingDirectory = "build/"
 }
 
-<<<<<<< HEAD
 task startMongo(type:Exec) {
     executable "${project.projectDir}/data/start_mongo.sh"
 }
@@ -102,8 +93,6 @@ task stopMongo(type:Exec) {
 test.dependsOn startMongo
 test.finalizedBy stopMongo
 
-=======
->>>>>>> ef163b96039064c4a329bd10b8fb84f83d16d9e5
 // https://github.com/stevesaliman/gradle-cobertura-plugin
 // http://ingorichter.blogspot.ch/2013/03/using-cobertura-with-gradle.html for list of options
 cobertura {
