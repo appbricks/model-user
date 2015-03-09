@@ -46,7 +46,7 @@ public class MongoConfiguration
 
         Mongobee runner = new Mongobee(this.mongo());
         runner.setDbName(this.getDatabaseName());
-        runner.setChangeLogsScanPackage("com.userf.repository.changelogs");
+        runner.setChangeLogsScanPackage("org.appbricks.repository.changelogs");
 
         return runner;
     }
