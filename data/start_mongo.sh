@@ -11,7 +11,7 @@ mkdir -p $LOGDIR
 DATADIR=$DIR/.mongo
 mkdir -p $DATADIR
 
-MONGO_VERSION=2.6.7
+MONGO_VERSION=3.0.7
 export PATH=$PATH:$HOME/Tools/mongodb-osx-x86_64-$MONGO_VERSION/bin
 
 if [ -e $RUNDIR/mongo.pid ]; then

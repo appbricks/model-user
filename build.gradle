@@ -19,7 +19,7 @@ group = 'org.appbricks'
 version =  "0.1.0-SNAPSHOT"
 
 jar {
-    baseName = "ab-user-model"
+    baseName = "ab-model-user"
 }
 
 repositories {

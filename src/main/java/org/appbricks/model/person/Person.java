@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class Person
     extends BaseEntity {
 
+    private String fullName;
     private String familyName;
     private String givenName;
     private String additionalName;
@@ -54,6 +55,36 @@ public class Person
         this.givenName = givenName;
         this.additionalName = additionalName;
         this.honorificPrefix = honorificPrefix;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName  = fullName;
+    }
+
+    public boolean isFullNameReadOnly() {
+        return (this.familyName != null);
+    }
+
+    public String getFullName() {
+
+        if (fullName != null) {
+            return fullName;
+        } else {
+            StringBuilder sb = new StringBuilder();
+
+            if (this.givenName != null) {
+                sb.append(this.givenName);
+
+                if (this.additionalName != null) {
+                    sb.append(' ').append(this.additionalName);
+                    if (this.additionalName.length() == 1)
+                        sb.append(".");
+                }
+            }
+            sb.append(this.familyName);
+
+            return sb.toString();
+        }
     }
 
     public String getFamilyName() {

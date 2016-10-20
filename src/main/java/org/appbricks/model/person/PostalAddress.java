@@ -11,10 +11,7 @@ import java.util.Arrays;
 public class PostalAddress
     extends Contact {
 
-    ArrayList lines = new ArrayList<>();
-
-    private String pCode;
-    private String cCode;
+    ArrayList<String> lines = new ArrayList<>();
 
     @DBRef
     private PostalCode postalCode;
@@ -58,10 +55,7 @@ public class PostalAddress
     public String toString() {
         
         StringBuilder sb = new StringBuilder();
-        
-        this.lines.forEach(line -> {
-            sb.append(line).append(", ");
-        });
+        this.lines.forEach(line -> sb.append(line).append(", "));
         sb.setLength(sb.length() - 2);
         
         if (this.postalCode.getLocality() != null)

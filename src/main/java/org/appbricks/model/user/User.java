@@ -1,5 +1,6 @@
 package org.appbricks.model.user;
 
+import org.appbricks.model.Constants;
 import org.appbricks.model.person.Email;
 import org.appbricks.model.BaseEntity;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -8,25 +9,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Describes User of the system.
  */
 @Document(collection = "users")
-public class User
+public abstract class User
     extends BaseEntity {
 
     @Indexed(unique = true)
     private String loginName;
     private String password;
-    
-    private String email;
-    
-    private Account account = new Account();
-    
+
     @DBRef
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
@@ -37,17 +35,12 @@ public class User
         this.loginName = loginName;
     }
 
-    public User(String loginName, String email) {
-        this.loginName = loginName;
-        this.email = email;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
 
     public String getLoginName() {
-        return this.loginName;
+        return this.loginName == null ? super.getId() : this.loginName;
     }
 
     public void setPassword(String password) {
@@ -59,26 +52,7 @@ public class User
     }
 
     public String getPassword() {
-        return this.password;
-    }
-    
-    public String getEmail() {
-
-        if (this.account == null) {
-            Email email = this.account.getPrimaryEmail();
-            if (email != null)
-                return email.getAddress();
-        }
-
-        return this.email;
-    }
-
-    public boolean isRegistered() {
-        return this.account.getOwners().size() > 0;
-    }
-
-    public Account getAccount() {
-        return this.account;
+        return this.password == null ? Constants.EMPTY_STRING : this.password;
     }
 
     public LoggedInUser getLoggedInUser() {
